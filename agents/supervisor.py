@@ -28,7 +28,7 @@ def critic_node(state: AgentState):
     with open("mock_database.json", "r") as f:
         db = json.load(f)
     
-    from schema.supply_chain import Shipment
+    from agents.schema.supply_chain import Shipment
     shipment_obj = Shipment(**state["extracted_data"])
     verdict = critic.verify(shipment_obj, db)
     

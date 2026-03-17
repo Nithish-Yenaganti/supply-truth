@@ -4,7 +4,7 @@ from dotenv import load_dotenv
 from langchain_google_genai import ChatGoogleGenerativeAI
 from langchain_core.prompts import ChatPromptTemplate
 from pydantic import BaseModel, Field
-from schema.supply_chain import Shipment
+from agents.schema.supply_chain import Shipment
 
 load_dotenv()
 
@@ -45,4 +45,3 @@ class CriticAgent:
             "data": extracted_data.model_dump_json(),
             "db": json.dumps(db_context)
         })
-
