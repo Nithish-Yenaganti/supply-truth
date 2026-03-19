@@ -2,6 +2,8 @@ from typing import TypedDict, Annotated, List
 from langgraph.graph import StateGraph, END
 from agents.parser_agent import ParserAgent
 from agents.critic_agent import CriticAgent
+import os
+import json
 
 # 1. Define the 'State' (What the agents share)
 class AgentState(TypedDict):
