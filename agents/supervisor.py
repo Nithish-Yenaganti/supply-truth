@@ -43,23 +43,56 @@ def router(state: AgentState):
     else:
         return "retry"
 
-# 3. Build the Graph
+
+def save_to_gold_node(state: AgentState):
+    """
+    The Final Step: Writes the verified 'Truth' to a permanent file.
+    """
+    print("--- STEP: SAVING TO GOLD VAULT ---")
+    
+    data = state["extracted_data"]
+    shipment_id = data.get("shipment_id", "UNKNOWN_ID")
+    
+    # Ensure the directory exists
+    os.makedirs("data/gold", exist_ok=True)
+    
+    file_path = f"data/gold/{shipment_id}.json"
+    
+    # Write the data with 'indent' so it's human-readable
+    with open(file_path, "w") as f:
+        json.dump(data, f, indent=4)
+        
+    print(f"--- SUCCESS: Data secured at {file_path} ---")
+    return {"final_message": f"Saved to {file_path}"} # This is the final output
+
+# 4. Build the Graph
+
+# --- 1. Initialize the Graph ---
 workflow = StateGraph(AgentState)
 
-workflow.add_node("parser", parser_node)
-workflow.add_node("critic", critic_node)
+# --- 2. Add ALL Nodes (The Workers) ---
+workflow.add_node("parser", parser_node)           # Agent A & B
+workflow.add_node("critic", critic_node)           # Agent C & D
+workflow.add_node("save_to_gold", save_to_gold_node) # The Vault (Step 5)
 
+# --- 3. Define the START and Fixed Edges ---
 workflow.set_entry_point("parser")
 workflow.add_edge("parser", "critic")
 
+# --- 4. Define the Conditional Logic (The Router) ---
 workflow.add_conditional_edges(
-    "critic",
-    router,
+    "critic", 
+    router, 
     {
-        "accept": END,
-        "retry": "parser", # GO BACK AND FIX IT
-        "fail": END
+        "accept": "save_to_gold",  # If clean, go to the Vault
+        "retry": "parser",        # If dirty, try again
+        "fail": END               # If hopeless, stop
     }
 )
 
+# --- 5. Define the Final Exit ---
+# Once saved to gold, the process is finished.
+workflow.add_edge("save_to_gold", END)
+
+# --- 6. Compile the Application ---
 app = workflow.compile()
