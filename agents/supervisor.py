@@ -1,5 +1,13 @@
+import sys
+from pathlib import Path
 from typing import TypedDict, Annotated, List
 from langgraph.graph import StateGraph, END
+
+# Ensure project root is importable when running this file directly.
+PROJECT_ROOT = Path(__file__).resolve().parents[1]
+if str(PROJECT_ROOT) not in sys.path:
+    sys.path.insert(0, str(PROJECT_ROOT))
+
 from agents.parser_agent import ParserAgent
 from agents.critic_agent import CriticAgent
 import os
@@ -20,14 +28,17 @@ critic = CriticAgent()
 def parser_node(state: AgentState):
     print("--- PARSING DATA ---")
     result = parser.extract_shipment(state["raw_text"])
-    # We convert to dict to keep the 'State' serializable
-    return {"extracted_data": result.dict(), "iterations": state["iterations"] + 1}
+    # Keep state JSON-serializable (e.g., datetime -> ISO string).
+    return {
+        "extracted_data": result.model_dump(mode="json"),
+        "iterations": state["iterations"] + 1,
+    }
 
 def critic_node(state: AgentState):
     print("--- CRITIQUING DATA ---")
     # Here we would load our mock_database.json
     import json
-    with open("mock_database.json", "r") as f:
+    with open("./mock_database.json", "r") as f:
         db = json.load(f)
     
     from agents.schema.supply_chain import Shipment
@@ -98,3 +109,31 @@ workflow.add_edge("save_to_gold", END)
 
 # --- 6. Compile the Application ---
 app = workflow.compile()
+
+
+if __name__ == "__main__":
+    # The messy input that needs cleaning
+    initial_input = {
+        "raw_text": """
+        Shipment ID: MERC-550
+        Origin: Singapore Global Port
+        Destination: Los Angeles
+        ETA: 2026-04-10
+        Items: 200 x HDC-09
+        """,
+        
+        "iterations": 0,
+    }
+
+    print("Starting SupplyChain Truth Engine...\n")
+    
+    # Run the graph until it hits 'END'
+    final_state = app.invoke(initial_input)
+
+    print("\n--- FINAL PROCESS SUMMARY ---")
+    if final_state["critique"]["is_valid"]:
+        print("RESULT: Successfully Verified and Saved.")
+        print(f"FINAL DATA: {final_state['extracted_data']}")
+    else:
+        print(f"RESULT: Failed. Human intervention required.")
+        print(f"REASON: {final_state['critique']['final_decision']}")

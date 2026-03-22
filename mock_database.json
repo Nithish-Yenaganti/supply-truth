@@ -1,0 +1,15 @@
+{
+    "approved_suppliers": ["Singapore Global Port", "Shanghai Logistics Co"],
+    "valid_skus": {
+      "HDC-09": "Heavy-Duty Crate",
+      "SP-X1": "Solar Panel v1",
+      "RW-10": "Red Widget"
+    },
+    "active_purchase_orders": [
+      {
+        "po_id": "PO-2026-001",
+        "expected_sku": "HDC-09",
+        "max_quantity": 500
+      }
+    ]
+  }

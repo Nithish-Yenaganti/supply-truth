@@ -1,0 +1,13 @@
+{
+    "shipment_id": "MERC-550",
+    "origin": "Singapore Global Port",
+    "destination": "Los Angeles",
+    "eta": "2026-04-10T00:00:00Z",
+    "items": [
+        {
+            "sku": "HDC-09",
+            "quantity": 200,
+            "description": null
+        }
+    ]
+}
