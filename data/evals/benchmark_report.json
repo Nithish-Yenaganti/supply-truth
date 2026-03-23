@@ -1,0 +1,35 @@
+{
+  "stats": {
+    "total_cases": 1,
+    "perfect_matches": 0,
+    "partial_matches": 0,
+    "critical_failures": 1,
+    "total_latency": 0.01063990592956543,
+    "avg_latency": 0.01063990592956543
+  },
+  "generated_at": "2026-03-23T03:00:09.079072",
+  "results": [
+    {
+      "case_id": 1,
+      "input": "Hey, this is Arvando from Logistics. We're moving 450 units of the HIV-TEST-01 kits to Vietnam. ASN is VN-992. Should be there by Friday the 27th.",
+      "expected": {
+        "shipment_id": "VN-992",
+        "sku": "HIV-TEST-01",
+        "quantity": 450,
+        "destination": "Vietnam",
+        "eta": "2026-03-27"
+      },
+      "actual": {},
+      "critique": {
+        "is_valid": false,
+        "issues": [
+          "Error during parsing: [Errno 8] nodename nor servname provided, or not known"
+        ],
+        "reconciliation_status": "PARSER_ERROR",
+        "final_decision": "Parser failed before structured extraction."
+      },
+      "score": 0.0,
+      "latency_sec": 0.01
+    }
+  ]
+}
