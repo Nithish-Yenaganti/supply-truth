@@ -1,0 +1,50 @@
+{"input": "Hey, this is Arvando from Logistics. We're moving 450 units of the HIV-TEST-01 kits to Vietnam. ASN is VN-992. Should be there by Friday the 27th.", "expected": {"shipment_id": "VN-992", "sku": "HIV-TEST-01", "quantity": 450, "destination": "Vietnam", "eta": "2026-03-27"}}
+{"input": "URGENT: Quantity on VN-992 changed to 445 due to a warehouse spill. Everything else is same.", "expected": {"shipment_id": "VN-992", "quantity": 445}}
+{"input": "New PO issued: PO-8871. Item: ARV-PED-LIQUID. Qty: 1000 bottles. Ship to Côte d'Ivoire. ETA: April 5.", "expected": {"shipment_id": "PO-8871", "sku": "ARV-PED-LIQUID", "quantity": 1000, "destination": "Côte d'Ivoire", "eta": "2026-04-05"}}
+{"input": "System Log: [BOL: 4421] [Port: Singapore] [Status: Delayed] [New Date: 2026-03-30] [Item: MASK-N95] [Count: 5000]", "expected": {"shipment_id": "4421", "sku": "MASK-N95", "quantity": 5000, "destination": "Singapore", "eta": "2026-03-30"}}
+{"input": "Driver Update: I'm at the dock for BOL-4421. Only 4995 masks found. 5 boxes missing.", "expected": {"shipment_id": "4421", "quantity": 4995}}
+{"input": "WhatsApp from Agent: 'HDC-09 kits arrived at Hanoi warehouse. ID is ASN-Hanoi-1. 200 units counted.'", "expected": {"shipment_id": "ASN-Hanoi-1", "sku": "HDC-09", "quantity": 200, "destination": "Hanoi"}}
+{"input": "The price for Nevirapine on order ORD-55 has been set to 0.03 per unit. Shipping 50,000 units to Nigeria.", "expected": {"shipment_id": "ORD-55", "sku": "Nevirapine", "quantity": 50000, "destination": "Nigeria", "price": 0.03}}
+{"input": "RECALL: MASK-N95 from BOL-4421 has failed QC. Do not mark as gold.", "expected": {"shipment_id": "4421", "status": "RECALLED"}}
+{"input": "Ref ID: 77712. Product: MALARIA-VACC-02. Destination: Kenya. We are sending double the usual amount (400 total).", "expected": {"shipment_id": "77712", "sku": "MALARIA-VACC-02", "quantity": 400, "destination": "Kenya"}}
+{"input": "Correction on 77712: Destination is actually Ethiopia, not Kenya. Sorry for the mixup.", "expected": {"shipment_id": "77712", "destination": "Ethiopia"}}
+{"input": "Vendor: Aurobindo. Shipping 300 Pediatric ARVs. Ref: ARB-99. Arriving 03/28.", "expected": {"shipment_id": "ARB-99", "sku": "ARV-PED", "quantity": 300, "eta": "2026-03-28"}}
+{"input": "Invoice #INV-202: 10,000 units of Generic-D-10. Destination: South Africa. Price: $1.20.", "expected": {"shipment_id": "INV-202", "sku": "Generic-D-10", "quantity": 10000, "destination": "South Africa", "price": 1.20}}
+{"input": "Wait, INV-202 is actually 10,500 units. The bonus 500 units were added today.", "expected": {"shipment_id": "INV-202", "quantity": 10500}}
+{"input": "Logistics Alert: BOL-229 stuck at Suez Canal. New ETA is April 20th. Carrying 500 generators.", "expected": {"shipment_id": "BOL-229", "sku": "generators", "quantity": 500, "eta": "2026-04-20"}}
+{"input": "Confirming arrival of BOL-229 at Port Said. 500 units verified. Moving to trucks.", "expected": {"shipment_id": "BOL-229", "status": "In Transit"}}
+{"input": "ID: 8821. Shipping 60 pallets of Water Filters to Haiti. Expected tomorrow.", "expected": {"shipment_id": "8821", "sku": "Water Filters", "quantity": 60, "destination": "Haiti", "eta": "2026-03-24"}}
+{"input": "Haiti shipment (8821) diverted to Dominican Republic due to port closure.", "expected": {"shipment_id": "8821", "destination": "Dominican Republic"}}
+{"input": "Shipment for project 100-CI-T01. ID: CI-5. 500 units of Nevirapine 10mg. Origin: India.", "expected": {"shipment_id": "CI-5", "sku": "Nevirapine 10mg", "quantity": 500, "origin": "India"}}
+{"input": "Update CI-5: Origin is actually China, not India. Supplier changed last minute.", "expected": {"shipment_id": "CI-5", "origin": "China"}}
+{"input": "Vendor Ranbaxy sends 2000 boxes of 'Reveal' brand tests. ID: RAN-TEST. To Vietnam.", "expected": {"shipment_id": "RAN-TEST", "sku": "Reveal", "quantity": 2000, "destination": "Vietnam"}}
+{"input": "RAN-TEST partial delivery: Only 1500 boxes arrived today. 500 still in transit.", "expected": {"shipment_id": "RAN-TEST", "quantity": 1500}}
+{"input": "Final update for RAN-TEST: Remaining 500 units arrived. Total now 2000.", "expected": {"shipment_id": "RAN-TEST", "quantity": 2000}}
+{"input": "ID: 4455. Product: 'Pediatric' sub-class ARVs. Qty: 50. Price: 15.00 each.", "expected": {"shipment_id": "4455", "sku": "Pediatric ARVs", "quantity": 50, "price": 15.00}}
+{"input": "Cancel ID: 4455. Warehouse destroyed in fire.", "expected": {"shipment_id": "4455", "status": "CANCELLED"}}
+{"input": "ID: BOL-NYC. 1000 units of PPE. To NYC. From New Jersey. Truck 44.", "expected": {"shipment_id": "BOL-NYC", "sku": "PPE", "quantity": 1000, "destination": "NYC", "origin": "New Jersey"}}
+{"input": "BOL-NYC: 10 units damaged by water. New quantity 990.", "expected": {"shipment_id": "BOL-NYC", "quantity": 990}}
+{"input": "ASN-778: 400 test kits for malaria. Arriving in Luanda, Angola. May 1st.", "expected": {"shipment_id": "ASN-778", "sku": "malaria kits", "quantity": 400, "destination": "Luanda, Angola", "eta": "2026-05-01"}}
+{"input": "ASN-778: ETA changed to April 25th. Express air freight used.", "expected": {"shipment_id": "ASN-778", "eta": "2026-04-25"}}
+{"input": "ID: M1. 1 unit of Medical Fridge. To London. High value.", "expected": {"shipment_id": "M1", "sku": "Medical Fridge", "quantity": 1, "destination": "London"}}
+{"input": "ID: M1: Delivered safely to London Clinic.", "expected": {"shipment_id": "M1", "status": "Delivered"}}
+{"input": "Text: 'Need 50 more of M1 for London. Duplicate order ID M2.'", "expected": {"shipment_id": "M2", "sku": "Medical Fridge", "quantity": 50, "destination": "London"}}
+{"input": "ID: SHIP-99. 300 boxes of insulin. Arriving tomorrow. Store at 2-8 degrees.", "expected": {"shipment_id": "SHIP-99", "sku": "insulin", "quantity": 300, "eta": "2026-03-24"}}
+{"input": "SHIP-99: Temperature sensor triggered 10 degrees. Check for spoilage.", "expected": {"shipment_id": "SHIP-99", "status": "ALARM"}}
+{"input": "ID: T100. 100 units of T-cell tests. To Tokyo. Port: Narita.", "expected": {"shipment_id": "T100", "sku": "T-cell tests", "quantity": 100, "destination": "Tokyo"}}
+{"input": "T100: Quantity corrected to 110. 10 extra included for training.", "expected": {"shipment_id": "T100", "quantity": 110}}
+{"input": "ID: V-1. 5000 units of Vaccines. To Vietnam. From UK. Arriving June.", "expected": {"shipment_id": "V-1", "sku": "Vaccines", "quantity": 5000, "destination": "Vietnam", "origin": "UK", "eta": "2026-06-01"}}
+{"input": "V-1: Shipping in two batches. Batch 1: 2500 units arriving June 1st.", "expected": {"shipment_id": "V-1", "quantity": 2500, "eta": "2026-06-01"}}
+{"input": "V-1: Batch 2: 2500 units arriving June 15th.", "expected": {"shipment_id": "V-1", "quantity": 5000, "eta": "2026-06-15"}}
+{"input": "ID: B-50. 50 bikes for health workers. To Malawi. Vendor: Trek.", "expected": {"shipment_id": "B-50", "sku": "bikes", "quantity": 50, "destination": "Malawi"}}
+{"input": "B-50: Only 48 bikes in stock. Sending 48 now.", "expected": {"shipment_id": "B-50", "quantity": 48}}
+{"input": "ID: FOOD-1. 100 tons of grain. To Sudan. Relief project.", "expected": {"shipment_id": "FOOD-1", "sku": "grain", "quantity": 100, "destination": "Sudan"}}
+{"input": "FOOD-1: 10 tons lost to theft during transit.", "expected": {"shipment_id": "FOOD-1", "quantity": 90}}
+{"input": "ID: LAB-KIT. 10 Microscopes. To Brazil. Price: $2000 each.", "expected": {"shipment_id": "LAB-KIT", "sku": "Microscopes", "quantity": 10, "destination": "Brazil", "price": 2000}}
+{"input": "LAB-KIT: Price reduced to $1800 for bulk discount.", "expected": {"shipment_id": "LAB-KIT", "price": 1800}}
+{"input": "ID: 12345. 1000 Blankets. To Syria. Arriving Tonight.", "expected": {"shipment_id": "12345", "sku": "Blankets", "quantity": 1000, "destination": "Syria", "eta": "2026-03-23"}}
+{"input": "12345: Shipment delayed by snow. ETA shifted to Wednesday.", "expected": {"shipment_id": "12345", "eta": "2026-03-25"}}
+{"input": "ID: SOLAR-9. 20 Solar Panels. To Zimbabwe. Freight: Air.", "expected": {"shipment_id": "SOLAR-9", "sku": "Solar Panels", "quantity": 20, "destination": "Zimbabwe"}}
+{"input": "SOLAR-9: Freight changed to Sea to save costs. Arriving in 3 weeks.", "expected": {"shipment_id": "SOLAR-9", "eta": "2026-04-13"}}
+{"input": "ID: FINAL-1. 1 unit of Sample Data. To Test Folder. End of Eval.", "expected": {"shipment_id": "FINAL-1", "sku": "Sample Data", "quantity": 1, "destination": "Test Folder"}}
+{"input": "FINAL-1: Finished. 50 cases total.", "expected": {"shipment_id": "FINAL-1", "status": "COMPLETED"}}

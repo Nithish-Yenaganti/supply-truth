@@ -1,15 +1,66 @@
 {
-    "approved_suppliers": ["Singapore Global Port", "Shanghai Logistics Co"],
-    "valid_skus": {
-      "HDC-09": "Heavy-Duty Crate",
-      "SP-X1": "Solar Panel v1",
-      "RW-10": "Red Widget"
+  "approved_suppliers": [
+    "Singapore Global Port", 
+    "Shanghai Logistics Co", 
+    "Ranbaxy", 
+    "Aurobindo", 
+    "Arvando Logistics",
+    "Trek Bikes",
+    "UNICEF Relief"
+  ],
+  "valid_skus": {
+    "HDC-09": "Heavy-Duty Crate",
+    "SP-X1": "Solar Panel v1",
+    "RW-10": "Red Widget",
+    "HIV-TEST-01": "Rapid HIV Diagnostic Kit",
+    "ARV-PED-LIQUID": "Pediatric Antiretroviral Oral Suspension",
+    "MASK-N95": "N95 Respirator Mask",
+    "NEV-10": "Nevirapine 10mg/ml",
+    "MALARIA-VACC-02": "Malaria Vaccine Type 2",
+    "INS-300": "Insulin Storage Pack"
+  },
+  "active_purchase_orders": [
+    {
+      "po_id": "PO-2026-001",
+      "expected_sku": "HDC-09",
+      "max_quantity": 500,
+      "allowed_destination": "Singapore",
+      "contract_price": 45.00
     },
-    "active_purchase_orders": [
-      {
-        "po_id": "PO-2026-001",
-        "expected_sku": "HDC-09",
-        "max_quantity": 500
-      }
-    ]
-  }
+    {
+      "po_id": "VN-992",
+      "expected_sku": "HIV-TEST-01",
+      "max_quantity": 450,
+      "allowed_destination": "Vietnam",
+      "contract_price": 2.50
+    },
+    {
+      "po_id": "PO-8871",
+      "expected_sku": "ARV-PED-LIQUID",
+      "max_quantity": 1000,
+      "allowed_destination": "Côte d'Ivoire",
+      "contract_price": 12.00
+    },
+    {
+      "po_id": "BOL-4421",
+      "expected_sku": "MASK-N95",
+      "max_quantity": 5000,
+      "allowed_destination": "Singapore",
+      "contract_price": 0.50
+    },
+    {
+      "po_id": "ORD-55",
+      "expected_sku": "NEV-10",
+      "max_quantity": 50000,
+      "allowed_destination": "Nigeria",
+      "contract_price": 0.03
+    },
+    {
+      "po_id": "77712",
+      "expected_sku": "MALARIA-VACC-02",
+      "max_quantity": 500,
+      "allowed_destination": "Ethiopia",
+      "contract_price": 150.00
+    }
+  ]
+}
