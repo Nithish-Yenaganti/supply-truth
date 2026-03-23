@@ -2,6 +2,7 @@ import sys
 from pathlib import Path
 from typing import TypedDict, Annotated, List
 from langgraph.graph import StateGraph, END
+from datetime import datetime
 
 # Ensure project root is importable when running this file directly.
 PROJECT_ROOT = Path(__file__).resolve().parents[1]
@@ -28,6 +29,18 @@ critic = CriticAgent()
 def parser_node(state: AgentState):
     print("--- PARSING DATA ---")
     result = parser.extract_shipment(state["raw_text"])
+    if isinstance(result, str):
+        return {
+            "extracted_data": {},
+            "critique": {
+                "is_valid": False,
+                "issues": [result],
+                "reconciliation_status": "PARSER_ERROR",
+                "final_decision": "Parser failed before structured extraction.",
+            },
+            "iterations": state["iterations"] + 1,
+        }
+
     # Keep state JSON-serializable (e.g., datetime -> ISO string).
     return {
         "extracted_data": result.model_dump(mode="json"),
@@ -36,6 +49,16 @@ def parser_node(state: AgentState):
 
 def critic_node(state: AgentState):
     print("--- CRITIQUING DATA ---")
+    if not state.get("extracted_data"):
+        return {
+            "critique": state.get("critique", {
+                "is_valid": False,
+                "issues": ["Missing extracted_data from parser."],
+                "reconciliation_status": "PARSER_ERROR",
+                "final_decision": "Parser did not produce structured data.",
+            })
+        }
+
     # Here we would load our mock_database.json
     import json
     with open("./mock_database.json", "r") as f:
@@ -57,26 +80,43 @@ def router(state: AgentState):
         return "retry"
 
 
-def save_to_gold_node(state: AgentState):
+def save_to_gold_node(state):
     """
-    The Final Step: Writes the verified 'Truth' to a permanent file.
+    This is your 'Truth Vault' logic. 
+    It ensures we keep a history of every update.
     """
-    print("--- STEP: SAVING TO GOLD VAULT ---")
-    
-    data = state["extracted_data"]
-    shipment_id = data.get("shipment_id", "UNKNOWN_ID")
-    
-    # Ensure the directory exists
-    os.makedirs("data/gold", exist_ok=True)
-    
+    new_data = state["extracted_data"]
+    shipment_id = new_data.get("shipment_id", "UNKNOWN")
     file_path = f"data/gold/{shipment_id}.json"
-    
-    # Write the data with 'indent' so it's human-readable
+
+    # 1. Initialize or Load the Record
+    if os.path.exists(file_path):
+        with open(file_path, "r") as f:
+            full_record = json.load(f)
+    else:
+        full_record = {
+            "shipment_id": shipment_id,
+            "current_state": {},
+            "history": []
+        }
+
+    # 2. Add the update to History
+    history_entry = {
+        "version": len(full_record["history"]) + 1,
+        "updated_at": datetime.now().strftime("%Y-%m-%d %H:%M:%S"),
+        "changes": new_data
+    }
+    full_record["history"].append(history_entry)
+
+    # 3. Update the Current State (The 'Latest Truth')
+    full_record["current_state"].update(new_data)
+
+    # 4. Final Save
     with open(file_path, "w") as f:
-        json.dump(data, f, indent=4)
-        
-    print(f"--- SUCCESS: Data secured at {file_path} ---")
-    return {"final_message": f"Saved to {file_path}"} # This is the final output
+        json.dump(full_record, f, indent=4)
+    
+    print(f"Record {shipment_id} updated to Version {len(full_record['history'])}")
+    return state
 
 # 4. Build the Graph
 
