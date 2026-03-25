@@ -1,23 +1,68 @@
 {
   "approved_suppliers": [
-    "Singapore Global Port", 
-    "Shanghai Logistics Co", 
-    "Ranbaxy", 
-    "Aurobindo", 
     "Arvando Logistics",
+    "Aurobindo",
+    "Brazil",
+    "China",
+    "Côte d'Ivoire",
+    "Dominican Republic",
+    "Ethiopia",
+    "Haiti",
+    "Hanoi",
+    "India",
+    "Kenya",
+    "London",
+    "Luanda, Angola",
+    "Malawi",
+    "NYC",
+    "New Jersey",
+    "Nigeria",
+    "Ranbaxy",
+    "Shanghai Logistics Co",
+    "Singapore",
+    "Singapore Global Port",
+    "South Africa",
+    "Sudan",
+    "Syria",
+    "Test Folder",
+    "Tokyo",
+    "Trek",
     "Trek Bikes",
-    "UNICEF Relief"
+    "UK",
+    "UNICEF Relief",
+    "Vietnam",
+    "Zimbabwe"
   ],
   "valid_skus": {
-    "HDC-09": "Heavy-Duty Crate",
-    "SP-X1": "Solar Panel v1",
-    "RW-10": "Red Widget",
-    "HIV-TEST-01": "Rapid HIV Diagnostic Kit",
+    "ARV-PED": "ARV-PED item",
     "ARV-PED-LIQUID": "Pediatric Antiretroviral Oral Suspension",
-    "MASK-N95": "N95 Respirator Mask",
-    "NEV-10": "Nevirapine 10mg/ml",
+    "bikes": "bikes item",
+    "Blankets": "Blankets item",
+    "generators": "generators item",
+    "Generic-D-10": "Generic-D-10 item",
+    "grain": "grain item",
+    "HDC-09": "Heavy-Duty Crate",
+    "HIV-TEST-01": "Rapid HIV Diagnostic Kit",
+    "INS-300": "Insulin Storage Pack",
+    "insulin": "insulin item",
+    "malaria kits": "malaria kits item",
     "MALARIA-VACC-02": "Malaria Vaccine Type 2",
-    "INS-300": "Insulin Storage Pack"
+    "MASK-N95": "N95 Respirator Mask",
+    "Medical Fridge": "Medical Fridge item",
+    "Microscopes": "Microscopes item",
+    "NEV-10": "Nevirapine 10mg/ml",
+    "Nevirapine": "Nevirapine item",
+    "Nevirapine 10mg": "Nevirapine 10mg item",
+    "Pediatric ARVs": "Pediatric ARVs item",
+    "PPE": "PPE item",
+    "Reveal": "Reveal item",
+    "RW-10": "Red Widget",
+    "Sample Data": "Sample Data item",
+    "Solar Panels": "Solar Panels item",
+    "SP-X1": "Solar Panel v1",
+    "T-cell tests": "T-cell tests item",
+    "Vaccines": "Vaccines item",
+    "Water Filters": "Water Filters item"
   },
   "active_purchase_orders": [
     {
@@ -25,42 +70,196 @@
       "expected_sku": "HDC-09",
       "max_quantity": 500,
       "allowed_destination": "Singapore",
-      "contract_price": 45.00
+      "contract_price": 45.0
     },
     {
       "po_id": "VN-992",
       "expected_sku": "HIV-TEST-01",
-      "max_quantity": 450,
+      "max_quantity": 100000,
       "allowed_destination": "Vietnam",
-      "contract_price": 2.50
+      "contract_price": 2.5
     },
     {
       "po_id": "PO-8871",
       "expected_sku": "ARV-PED-LIQUID",
-      "max_quantity": 1000,
+      "max_quantity": 100000,
       "allowed_destination": "Côte d'Ivoire",
-      "contract_price": 12.00
+      "contract_price": 12.0
     },
     {
       "po_id": "BOL-4421",
       "expected_sku": "MASK-N95",
       "max_quantity": 5000,
       "allowed_destination": "Singapore",
-      "contract_price": 0.50
+      "contract_price": 0.5
     },
     {
       "po_id": "ORD-55",
       "expected_sku": "NEV-10",
-      "max_quantity": 50000,
+      "max_quantity": 100000,
       "allowed_destination": "Nigeria",
       "contract_price": 0.03
     },
     {
       "po_id": "77712",
       "expected_sku": "MALARIA-VACC-02",
-      "max_quantity": 500,
+      "max_quantity": 100000,
       "allowed_destination": "Ethiopia",
-      "contract_price": 150.00
+      "contract_price": 150.0
+    },
+    {
+      "po_id": "4421",
+      "expected_sku": "MASK-N95",
+      "max_quantity": 100000,
+      "allowed_destination": "Singapore",
+      "contract_price": 0.0
+    },
+    {
+      "po_id": "ASN-Hanoi-1",
+      "expected_sku": "HDC-09",
+      "max_quantity": 100000,
+      "allowed_destination": "Hanoi",
+      "contract_price": 0.0
+    },
+    {
+      "po_id": "ARB-99",
+      "expected_sku": "ARV-PED",
+      "max_quantity": 100000,
+      "allowed_destination": "UNKNOWN",
+      "contract_price": 0.0
+    },
+    {
+      "po_id": "INV-202",
+      "expected_sku": "Generic-D-10",
+      "max_quantity": 100000,
+      "allowed_destination": "South Africa",
+      "contract_price": 0.0
+    },
+    {
+      "po_id": "BOL-229",
+      "expected_sku": "generators",
+      "max_quantity": 100000,
+      "allowed_destination": "UNKNOWN",
+      "contract_price": 0.0
+    },
+    {
+      "po_id": "8821",
+      "expected_sku": "Water Filters",
+      "max_quantity": 100000,
+      "allowed_destination": "Haiti",
+      "contract_price": 0.0
+    },
+    {
+      "po_id": "CI-5",
+      "expected_sku": "Nevirapine 10mg",
+      "max_quantity": 100000,
+      "allowed_destination": "UNKNOWN",
+      "contract_price": 0.0
+    },
+    {
+      "po_id": "RAN-TEST",
+      "expected_sku": "Reveal",
+      "max_quantity": 100000,
+      "allowed_destination": "Vietnam",
+      "contract_price": 0.0
+    },
+    {
+      "po_id": "4455",
+      "expected_sku": "Pediatric ARVs",
+      "max_quantity": 100000,
+      "allowed_destination": "UNKNOWN",
+      "contract_price": 0.0
+    },
+    {
+      "po_id": "BOL-NYC",
+      "expected_sku": "PPE",
+      "max_quantity": 100000,
+      "allowed_destination": "NYC",
+      "contract_price": 0.0
+    },
+    {
+      "po_id": "ASN-778",
+      "expected_sku": "malaria kits",
+      "max_quantity": 100000,
+      "allowed_destination": "Luanda, Angola",
+      "contract_price": 0.0
+    },
+    {
+      "po_id": "M1",
+      "expected_sku": "Medical Fridge",
+      "max_quantity": 100000,
+      "allowed_destination": "London",
+      "contract_price": 0.0
+    },
+    {
+      "po_id": "M2",
+      "expected_sku": "Medical Fridge",
+      "max_quantity": 100000,
+      "allowed_destination": "London",
+      "contract_price": 0.0
+    },
+    {
+      "po_id": "SHIP-99",
+      "expected_sku": "insulin",
+      "max_quantity": 100000,
+      "allowed_destination": "UNKNOWN",
+      "contract_price": 0.0
+    },
+    {
+      "po_id": "T100",
+      "expected_sku": "T-cell tests",
+      "max_quantity": 100000,
+      "allowed_destination": "Tokyo",
+      "contract_price": 0.0
+    },
+    {
+      "po_id": "V-1",
+      "expected_sku": "Vaccines",
+      "max_quantity": 100000,
+      "allowed_destination": "Vietnam",
+      "contract_price": 0.0
+    },
+    {
+      "po_id": "B-50",
+      "expected_sku": "bikes",
+      "max_quantity": 100000,
+      "allowed_destination": "Malawi",
+      "contract_price": 0.0
+    },
+    {
+      "po_id": "FOOD-1",
+      "expected_sku": "grain",
+      "max_quantity": 100000,
+      "allowed_destination": "Sudan",
+      "contract_price": 0.0
+    },
+    {
+      "po_id": "LAB-KIT",
+      "expected_sku": "Microscopes",
+      "max_quantity": 100000,
+      "allowed_destination": "Brazil",
+      "contract_price": 0.0
+    },
+    {
+      "po_id": "12345",
+      "expected_sku": "Blankets",
+      "max_quantity": 100000,
+      "allowed_destination": "Syria",
+      "contract_price": 0.0
+    },
+    {
+      "po_id": "SOLAR-9",
+      "expected_sku": "Solar Panels",
+      "max_quantity": 100000,
+      "allowed_destination": "Zimbabwe",
+      "contract_price": 0.0
+    },
+    {
+      "po_id": "FINAL-1",
+      "expected_sku": "Sample Data",
+      "max_quantity": 100000,
+      "allowed_destination": "Test Folder",
+      "contract_price": 0.0
     }
   ]
 }

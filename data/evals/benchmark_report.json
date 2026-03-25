@@ -1,13 +1,13 @@
 {
   "stats": {
-    "total_cases": 3,
+    "total_cases": 1,
     "perfect_matches": 0,
-    "partial_matches": 3,
-    "critical_failures": 0,
-    "total_latency": 121.55415797233582,
-    "avg_latency": 40.518052657445274
+    "partial_matches": 0,
+    "critical_failures": 1,
+    "total_latency": 0.8151271343231201,
+    "avg_latency": 0.8151271343231201
   },
-  "generated_at": "2026-03-24T16:23:33.125130",
+  "generated_at": "2026-03-24T18:27:53.088129",
   "results": [
     {
       "case_id": 1,
@@ -19,92 +19,17 @@
         "destination": "Vietnam",
         "eta": "2026-03-27"
       },
-      "actual": {
-        "shipment_id": "VN-992",
-        "origin": "null",
-        "destination": "Vietnam",
-        "eta": "2024-09-27T00:00:00Z",
-        "items": [
-          {
-            "sku": "HIV-TEST-01",
-            "quantity": 450,
-            "description": "kits"
-          }
-        ],
-        "sku": "HIV-TEST-01",
-        "quantity": 450
-      },
+      "actual": {},
       "critique": {
         "is_valid": false,
         "issues": [
-          "CONFLICT: Origin 'null' is not an approved supplier."
+          "Error during parsing: Error calling model 'gemini-2.5-pro' (INVALID_ARGUMENT): 400 INVALID_ARGUMENT. {'error': {'code': 400, 'message': 'Thinking level is not supported for this model.', 'status': 'INVALID_ARGUMENT'}}"
         ],
-        "reconciliation_status": "CONFLICT",
-        "final_decision": "The shipment is rejected because the origin 'null' is not an approved supplier."
+        "reconciliation_status": "PARSER_ERROR",
+        "final_decision": "Parser failed before structured extraction."
       },
-      "score": 0.8,
-      "latency_sec": 25.88
-    },
-    {
-      "case_id": 2,
-      "input": "URGENT: Quantity on VN-992 changed to 445 due to a warehouse spill. Everything else is same.",
-      "expected": {
-        "shipment_id": "VN-992",
-        "quantity": 445
-      },
-      "actual": {
-        "shipment_id": "VN-992",
-        "origin": "null",
-        "destination": "null",
-        "eta": "2024-01-01T00:00:00Z",
-        "items": []
-      },
-      "critique": {
-        "is_valid": false,
-        "issues": [
-          "Origin 'null' is not an approved supplier."
-        ],
-        "reconciliation_status": "CONFLICT",
-        "final_decision": "The shipment data is invalid due to an unapproved origin, resulting in a conflict."
-      },
-      "score": 0.5,
-      "latency_sec": 68.82
-    },
-    {
-      "case_id": 3,
-      "input": "New PO issued: PO-8871. Item: ARV-PED-LIQUID. Qty: 1000 bottles. Ship to C\u00f4te d'Ivoire. ETA: April 5.",
-      "expected": {
-        "shipment_id": "PO-8871",
-        "sku": "ARV-PED-LIQUID",
-        "quantity": 1000,
-        "destination": "C\u00f4te d'Ivoire",
-        "eta": "2026-04-05"
-      },
-      "actual": {
-        "shipment_id": "PO-8871",
-        "origin": "null",
-        "destination": "C\u00f4te d'Ivoire",
-        "eta": "2024-04-05T00:00:00Z",
-        "items": [
-          {
-            "sku": "ARV-PED-LIQUID",
-            "quantity": 1000,
-            "description": "bottles"
-          }
-        ],
-        "sku": "ARV-PED-LIQUID",
-        "quantity": 1000
-      },
-      "critique": {
-        "is_valid": false,
-        "issues": [
-          "Origin 'null' is not an approved supplier."
-        ],
-        "reconciliation_status": "CONFLICT",
-        "final_decision": "The shipment is rejected because the origin 'null' is not an approved supplier."
-      },
-      "score": 0.8,
-      "latency_sec": 26.86
+      "score": 0.0,
+      "latency_sec": 0.82
     }
   ]
 }
