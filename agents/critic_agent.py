@@ -17,9 +17,10 @@ class ValidationReview(BaseModel):
 class CriticAgent:
     def __init__(self):
         self.llm = ChatGoogleGenerativeAI(
-            model="gemini-2.5-pro", 
+            model="gemini-3-flash",
+            thinking_level="medium",
             temperature=0,
-            google_api_key=os.getenv("GEMINI_API_KEY")
+            google_api_key=os.getenv("GOOGLE_API_KEY") or os.getenv("GEMINI_API_KEY")
         )
         self.structured_llm = self.llm.with_structured_output(ValidationReview)
 

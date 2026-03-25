@@ -20,9 +20,10 @@ class ParserAgent:
         # We use Gemini 1.5 Pro for its reasoning depth
         # temperature=0 ensures we get facts, not 'creative' hallucinations
         self.llm = ChatGoogleGenerativeAI(
-            model="gemini-2.5-pro",
+            model="gemini-3-flash",
+            thinking_level="medium",
             temperature=0,
-            google_api_key=os.getenv("GOOGLE_API_KEY") or os.getenv("GEMINI_API_KEY")
+            google_api_key=os.getenv("GEMINI_API_KEY")
         )
         
         # This binds our schema to the LLM permanently for this agent

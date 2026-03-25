@@ -29,7 +29,7 @@ class SupplyTruthEvaluator:
         }
 
     def _normalize_actual(self, final_state: dict[str, Any]) -> dict[str, Any]:
-        data = final_state.get("extracted_data") or {}
+        data = final_state.get("extracted_data") or final_state.get("current_state") or {}
         items = data.get("items") or []
         first_item = items[0] if items else {}
 
