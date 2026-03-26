@@ -29,15 +29,28 @@ class SupplyTruthEvaluator:
         }
 
     def _normalize_actual(self, final_state: dict[str, Any]) -> dict[str, Any]:
-        data = final_state.get("extracted_data") or final_state.get("current_state") or {}
-        items = data.get("items") or []
-        first_item = items[0] if items else {}
+    # 1. Handle if the state itself is the object
+        if hasattr(final_state, "model_dump"):
+            data = final_state.model_dump()
+        elif isinstance(final_state, dict):
+            data = final_state.get("extracted_data") or final_state
+        else:
+            data = vars(final_state)
 
+        # 2. Ensure items are dictionaries, not LineItem objects
+        items = data.get("items") or []
+        processed_items = []
+        for item in items:
+            if hasattr(item, "model_dump"):
+                processed_items.append(item.model_dump())
+            else:
+                processed_items.append(item)
+
+        # 3. Flatten for the scorer
+        first_item = processed_items[0] if processed_items else {}
         normalized = dict(data)
-        if "sku" not in normalized and first_item.get("sku") is not None:
+        if "sku" not in normalized:
             normalized["sku"] = first_item.get("sku")
-        if "quantity" not in normalized and first_item.get("quantity") is not None:
-            normalized["quantity"] = first_item.get("quantity")
         return normalized
 
     def calculate_score(self, expected: dict[str, Any], actual: dict[str, Any]) -> float:

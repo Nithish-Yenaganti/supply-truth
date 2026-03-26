@@ -21,7 +21,6 @@ class ParserAgent:
         # temperature=0 ensures we get facts, not 'creative' hallucinations
         self.llm = ChatGoogleGenerativeAI(
             model="gemini-2.5-pro",
-            thinking_level="medium",
             temperature=0,
             google_api_key=os.getenv("GEMINI_API_KEY")
         )
