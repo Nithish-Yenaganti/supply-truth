@@ -1,9 +1,17 @@
 import os
 import json
+import sys
+from pathlib import Path
 from dotenv import load_dotenv
 from langchain_google_genai import ChatGoogleGenerativeAI
 from langchain_core.prompts import ChatPromptTemplate
 from pydantic import BaseModel, Field
+
+# Ensure project root is importable when running this file directly.
+PROJECT_ROOT = Path(__file__).resolve().parents[1]
+if str(PROJECT_ROOT) not in sys.path:
+    sys.path.insert(0, str(PROJECT_ROOT))
+
 from agents.schema.supply_chain import Shipment
 
 load_dotenv()
@@ -45,3 +53,32 @@ class CriticAgent:
             "data": extracted_data.model_dump_json(),
             "db": json.dumps(db_context)
         })
+
+
+if __name__ == "__main__":
+    critic = CriticAgent()
+
+    mock_db_path = Path(__file__).resolve().parents[1] / "mock_database.json"
+    with open(mock_db_path, "r") as f:
+        mock_db = json.load(f)
+
+    sample_shipment = Shipment(
+        shipment_id="MERC-550",
+        origin="Singapore Global Port",
+        destination="Los Angeles",
+        eta="2026-04-10T00:00:00Z",
+        items=[
+            {
+                "sku": "HDC-09",
+                "quantity": 200,
+                "description": "Heavy-Duty Crates",
+            }
+        ],
+    )
+
+    try:
+        verdict = critic.verify(sample_shipment, mock_db)
+        print("--- CRITIC VERDICT ---")
+        print(verdict.model_dump_json(indent=2))
+    except Exception as e:
+        print(f"Error during critic test: {e}")
