@@ -10,7 +10,7 @@ PROJECT_ROOT = Path(__file__).resolve().parents[1]
 if str(PROJECT_ROOT) not in sys.path:
     sys.path.insert(0, str(PROJECT_ROOT))
 
-from agents.schema.supply_chain import Shipment  # Our 'Truth' from Step 1
+from agents.schema.supply_chain import Shipment
 
 # Load environment variables (API Keys)
 load_dotenv()
@@ -53,3 +53,19 @@ class ParserAgent:
             return result
         except Exception as e:
             return f"Error during parsing: {str(e)}"
+
+
+
+if __name__ == "__main__":
+    parser = ParserAgent()
+    sample_text = (
+        "Shipment ID: MERC-550. Origin: Singapore Global Port. "
+        "Destination: Los Angeles. ETA: 2026-04-10. Items: 200 x HDC-09."
+    )
+   
+    print("Running------")
+    result = parser.extract_shipment(sample_text)
+    if isinstance(result, str):
+        print(result)
+    else:
+        print(result.model_dump())
