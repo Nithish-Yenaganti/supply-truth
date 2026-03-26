@@ -1,6 +1,6 @@
 import sys
 from pathlib import Path
-from typing import TypedDict, Annotated, List
+from typing import TypedDict
 from langgraph.graph import StateGraph, END
 from datetime import datetime
 
@@ -20,7 +20,6 @@ class AgentState(TypedDict):
     extracted_data: dict
     critique: dict
     iterations: int  # We limit loops so it doesn't run forever
-    final_output: dict
 
 # 2. Initialize our Agents
 parser = ParserAgent()
@@ -59,16 +58,16 @@ def critic_node(state: AgentState):
             })
         }
 
-    # Here we would load our mock_database.json
-    import json
-    with open("./mock_database.json", "r") as f:
+    # Load DB relative to project root so cwd does not matter.
+    db_path = PROJECT_ROOT / "mock_database.json"
+    with open(db_path, "r") as f:
         db = json.load(f)
     
     from agents.schema.supply_chain import Shipment
     shipment_obj = Shipment(**state["extracted_data"])
     verdict = critic.verify(shipment_obj, db)
     
-    return {"critique": verdict.dict()}
+    return {"critique": verdict.model_dump()}
 
 def router(state: AgentState):
     # This is the "Decision" function
@@ -80,13 +79,14 @@ def router(state: AgentState):
         return "retry"
 
 
-def save_to_gold_node(state):
+def save_to_gold_node(state: AgentState):
     """
     This is your 'Truth Vault' logic. 
     It ensures we keep a history of every update.
     """
     new_data = state["extracted_data"]
     shipment_id = new_data.get("shipment_id", "UNKNOWN")
+    os.makedirs("data/gold", exist_ok=True)
     file_path = f"data/gold/{shipment_id}.json"
 
     # 1. Initialize or Load the Record
@@ -100,9 +100,32 @@ def save_to_gold_node(state):
             "history": []
         }
 
+    # 1b. Migrate/repair legacy record shapes.
+    if not isinstance(full_record, dict):
+        full_record = {"shipment_id": shipment_id, "current_state": {}, "history": []}
+    full_record.setdefault("shipment_id", shipment_id)
+    if not isinstance(full_record.get("current_state"), dict):
+        # Preserve top-level shipment fields from legacy format.
+        legacy_state = {
+            k: v
+            for k, v in full_record.items()
+            if k not in {"shipment_id", "current_state", "history"}
+        }
+        full_record["current_state"] = legacy_state
+    if not isinstance(full_record.get("history"), list):
+        full_record["history"] = []
+
     # 2. Add the update to History
+    next_version = max(
+        (
+            entry.get("version", 0)
+            for entry in full_record["history"]
+            if isinstance(entry, dict) and isinstance(entry.get("version"), int)
+        ),
+        default=0,
+    ) + 1
     history_entry = {
-        "version": len(full_record["history"]) + 1,
+        "version": next_version,
         "updated_at": datetime.now().strftime("%Y-%m-%d %H:%M:%S"),
         "changes": new_data
     }
@@ -111,9 +134,11 @@ def save_to_gold_node(state):
     # 3. Update the Current State (The 'Latest Truth')
     full_record["current_state"].update(new_data)
 
-    # 4. Final Save
-    with open(file_path, "w") as f:
+    # 4. Final Save (atomic write to reduce corruption risk)
+    temp_path = f"{file_path}.tmp"
+    with open(temp_path, "w") as f:
         json.dump(full_record, f, indent=4)
+    os.replace(temp_path, file_path)
     
     print(f"Record {shipment_id} updated to Version {len(full_record['history'])}")
     return state
