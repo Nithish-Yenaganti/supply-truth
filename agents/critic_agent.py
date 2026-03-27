@@ -31,10 +31,58 @@ class CriticAgent:
         )
         self.structured_llm = self.llm.with_structured_output(ValidationReview)
 
-    def verify(self, extracted_data: Shipment, db_context: dict):
+    def _is_missing(self, value):
+        return value in (None, "", [], {})
+
+    def _detect_regressions(self, new_data: dict, prior_state: dict) -> list[str]:
+        regressions: list[str] = []
+        if not isinstance(prior_state, dict) or not prior_state:
+            return regressions
+
+        for key in ("origin", "destination", "eta"):
+            if not self._is_missing(prior_state.get(key)) and self._is_missing(new_data.get(key)):
+                regressions.append(key)
+
+        prior_items = prior_state.get("items") or []
+        new_items = new_data.get("items") or []
+        if prior_items:
+            if not new_items:
+                regressions.append("items")
+            else:
+                prior_item0 = prior_items[0] if isinstance(prior_items[0], dict) else {}
+                new_item0 = new_items[0] if isinstance(new_items[0], dict) else {}
+                for key in ("sku", "quantity"):
+                    if not self._is_missing(prior_item0.get(key)) and self._is_missing(new_item0.get(key)):
+                        regressions.append(f"items[0].{key}")
+
+        return regressions
+
+    def verify(
+        self,
+        extracted_data: Shipment,
+        db_context: dict,
+        prior_state: dict | None = None,
+        history: list | None = None,
+    ):
         """
-        Agent C & D: Compares the 'Parser Output' against 'Mock Database'.
+        Agent C & D: Compares the parser output against prior vault state and DB policy.
         """
+        # Regression guard: if latest extraction dropped previously known fields, reject early.
+        regressions = self._detect_regressions(
+            extracted_data.model_dump(mode="json"),
+            prior_state or {},
+        )
+        if regressions:
+            return ValidationReview(
+                is_valid=False,
+                issues=[
+                    "Field regression detected vs previous version: "
+                    + ", ".join(regressions)
+                ],
+                reconciliation_status="CONFLICT",
+                final_decision="Latest extraction dropped previously known fields.",
+            )
+
         prompt = ChatPromptTemplate.from_messages([
             ("system", (
                 "You are a Senior Logistics Auditor. Compare the EXTRACTED DATA against the DATABASE.\n"

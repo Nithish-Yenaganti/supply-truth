@@ -62,10 +62,29 @@ def critic_node(state: AgentState):
     db_path = PROJECT_ROOT / "mock_database.json"
     with open(db_path, "r") as f:
         db = json.load(f)
-    
+
+    # Load previous gold context (if exists) and pass to critic.
+    new_data = state["extracted_data"]
+    prior_state = {}
+    prior_history = []
+    shipment_id = new_data.get("shipment_id")
+    if shipment_id:
+        gold_path = PROJECT_ROOT / "data" / "gold" / f"{shipment_id}.json"
+        if gold_path.exists():
+            with open(gold_path, "r") as f:
+                prior_record = json.load(f)
+            if isinstance(prior_record, dict):
+                prior_state = prior_record.get("current_state", {}) or {}
+                prior_history = prior_record.get("history", []) or []
+
     from agents.schema.supply_chain import Shipment
-    shipment_obj = Shipment(**state["extracted_data"])
-    verdict = critic.verify(shipment_obj, db)
+    shipment_obj = Shipment(**new_data)
+    verdict = critic.verify(
+        shipment_obj,
+        db,
+        prior_state=prior_state,
+        history=prior_history,
+    )
     
     return {"critique": verdict.model_dump()}
 
@@ -105,7 +124,6 @@ def save_to_gold_node(state: AgentState):
         full_record = {"shipment_id": shipment_id, "current_state": {}, "history": []}
     full_record.setdefault("shipment_id", shipment_id)
     if not isinstance(full_record.get("current_state"), dict):
-        # Preserve top-level shipment fields from legacy format.
         legacy_state = {
             k: v
             for k, v in full_record.items()
@@ -114,6 +132,11 @@ def save_to_gold_node(state: AgentState):
         full_record["current_state"] = legacy_state
     if not isinstance(full_record.get("history"), list):
         full_record["history"] = []
+
+    # Skip log bloat: if nothing changed, do not create a new history version.
+    if full_record["current_state"] == new_data:
+        print(f"Record {shipment_id} unchanged; no new history version.")
+        return state
 
     # 2. Add the update to History
     next_version = max(
@@ -132,9 +155,10 @@ def save_to_gold_node(state: AgentState):
     full_record["history"].append(history_entry)
 
     # 3. Update the Current State (The 'Latest Truth')
-    full_record["current_state"].update(new_data)
+    # Replace, don't merge, so current_state always mirrors latest extraction exactly.
+    full_record["current_state"] = dict(new_data)
 
-    # 4. Final Save (atomic write to reduce corruption risk)
+    # 4. Final Save (atomic write)
     temp_path = f"{file_path}.tmp"
     with open(temp_path, "w") as f:
         json.dump(full_record, f, indent=4)

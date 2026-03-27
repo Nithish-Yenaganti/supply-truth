@@ -1,16 +1,7 @@
 {
     "shipment_id": "MERC-550",
-    "origin": "Singapore Global Port",
-    "destination": "Los Angeles",
-    "eta": "2026-04-10T00:00:00Z",
-    "items": [
-        {
-            "sku": "HDC-09",
-            "quantity": 200,
-            "description": null
-        }
-    ],
     "current_state": {
+        "shipment_id": "MERC-550",
         "origin": "Singapore Global Port",
         "destination": "Los Angeles",
         "eta": "2026-04-10T00:00:00Z",
@@ -20,13 +11,29 @@
                 "quantity": 200,
                 "description": null
             }
-        ],
-        "shipment_id": "MERC-550"
+        ]
     },
     "history": [
         {
             "version": 1,
-            "updated_at": "2026-03-26 15:21:04",
+            "updated_at": "2026-03-26 23:32:08",
+            "changes": {
+                "shipment_id": "MERC-550",
+                "origin": "Singapore Global Port",
+                "destination": "Los Angeles",
+                "eta": "2026-04-10T00:00:00Z",
+                "items": [
+                    {
+                        "sku": "HDC-09",
+                        "quantity": 200,
+                        "description": null
+                    }
+                ]
+            }
+        },
+        {
+            "version": 2,
+            "updated_at": "2026-03-26 23:37:51",
             "changes": {
                 "shipment_id": "MERC-550",
                 "origin": "Singapore Global Port",
