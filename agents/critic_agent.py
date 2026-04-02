@@ -3,7 +3,7 @@ import json
 import sys
 from pathlib import Path
 from dotenv import load_dotenv
-from langchain_google_genai import ChatGoogleGenerativeAI
+from langchain_openai import ChatOpenAI
 from langchain_core.prompts import ChatPromptTemplate
 from pydantic import BaseModel, Field
 
@@ -24,10 +24,12 @@ class ValidationReview(BaseModel):
 
 class CriticAgent:
     def __init__(self):
-        self.llm = ChatGoogleGenerativeAI(
-            model="gemini-2.5-pro",
+        self.llm = ChatOpenAI(
+            model="google/gemini-3.1-flash-lite-preview",
             temperature=0,
-            google_api_key=os.getenv("GOOGLE_API_KEY") or os.getenv("GEMINI_API_KEY")
+            api_key=os.getenv("GMI_CLOUD_API_KEY"),
+            base_url=os.getenv("BASE_URL"),
+            max_tokens=10000,
         )
         self.structured_llm = self.llm.with_structured_output(ValidationReview)
 
@@ -105,27 +107,20 @@ class CriticAgent:
 
 if __name__ == "__main__":
     critic = CriticAgent()
-
+    from agents.parser_agent import ParserAgent
+    parser = ParserAgent()
     mock_db_path = Path(__file__).resolve().parents[1] / "mock_database.json"
     with open(mock_db_path, "r") as f:
         mock_db = json.load(f)
 
-    sample_shipment = Shipment(
-        shipment_id="MERC-550",
-        origin="Singapore Global Port",
-        destination="Los Angeles",
-        eta="2026-04-10T00:00:00Z",
-        items=[
-            {
-                "sku": "HDC-09",
-                "quantity": 200,
-                "description": "Heavy-Duty Crates",
-            }
-        ],
+        sample_text = (
+        "Shipment ID: MERC-550. Origin: Singapore Global Port. "
+        "Destination: Los Angeles. ETA: 2026-04-10. Items: 200 x HDC-09."
     )
 
     try:
-        verdict = critic.verify(sample_shipment, mock_db)
+        extracted_data = parser.extract_shipment(sample_text)
+        verdict = critic.verify(extracted_data, mock_db)
         print("--- CRITIC VERDICT ---")
         print(verdict.model_dump_json(indent=2))
     except Exception as e:

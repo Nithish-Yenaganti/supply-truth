@@ -2,7 +2,7 @@ import os
 import sys
 from pathlib import Path
 from dotenv import load_dotenv
-from langchain_google_genai import ChatGoogleGenerativeAI
+from langchain_openai import ChatOpenAI
 from langchain_core.prompts import ChatPromptTemplate
 
 # Ensure project root is importable when running this file directly.
@@ -19,10 +19,13 @@ class ParserAgent:
     def __init__(self):
         # We use Gemini 1.5 Pro for its reasoning depth
         # temperature=0 ensures we get facts, not 'creative' hallucinations
-        self.llm = ChatGoogleGenerativeAI(
-            model="gemini-2.5-pro",
+        self.llm = ChatOpenAI(
+            model="google/gemini-3.1-flash-lite-preview",
             temperature=0,
-            google_api_key=os.getenv("GEMINI_API_KEY")
+            api_key=os.getenv("GMI_CLOUD_API_KEY"),
+            base_url=os.getenv("BASE_URL"),
+            max_tokens=10000,
+
         )
         
         # This binds our schema to the LLM permanently for this agent

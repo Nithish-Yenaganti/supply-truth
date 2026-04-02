@@ -92,7 +92,7 @@ def router(state: AgentState):
     # This is the "Decision" function
     if state["critique"]["is_valid"]:
         return "accept"
-    elif state["iterations"] > 3:
+    elif state["iterations"] > 2:
         return "fail"
     else:
         return "retry"
@@ -163,7 +163,7 @@ def save_to_gold_node(state: AgentState):
     with open(temp_path, "w") as f:
         json.dump(full_record, f, indent=4)
     os.replace(temp_path, file_path)
-    
+     
     print(f"Record {shipment_id} updated to Version {len(full_record['history'])}")
     return state
 
