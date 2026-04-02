@@ -1,0 +1,35 @@
+{
+    "shipment_id": "V-1",
+    "current_state": {
+        "shipment_id": "V-1",
+        "origin": "UK",
+        "destination": "Vietnam",
+        "eta": "2024-06-01T00:00:00Z",
+        "items": [
+            {
+                "sku": "VACCINES",
+                "quantity": 5000,
+                "description": "Vaccines"
+            }
+        ]
+    },
+    "history": [
+        {
+            "version": 1,
+            "updated_at": "2026-04-01 22:26:56",
+            "changes": {
+                "shipment_id": "V-1",
+                "origin": "UK",
+                "destination": "Vietnam",
+                "eta": "2024-06-01T00:00:00Z",
+                "items": [
+                    {
+                        "sku": "VACCINES",
+                        "quantity": 5000,
+                        "description": "Vaccines"
+                    }
+                ]
+            }
+        }
+    ]
+}

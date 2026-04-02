@@ -1,0 +1,35 @@
+{
+    "shipment_id": "4421",
+    "current_state": {
+        "shipment_id": "4421",
+        "origin": "Singapore",
+        "destination": "null",
+        "eta": "2026-03-30T00:00:00Z",
+        "items": [
+            {
+                "sku": "MASK-N95",
+                "quantity": 5000,
+                "description": null
+            }
+        ]
+    },
+    "history": [
+        {
+            "version": 1,
+            "updated_at": "2026-04-01 22:28:01",
+            "changes": {
+                "shipment_id": "4421",
+                "origin": "Singapore",
+                "destination": "null",
+                "eta": "2026-03-30T00:00:00Z",
+                "items": [
+                    {
+                        "sku": "MASK-N95",
+                        "quantity": 5000,
+                        "description": null
+                    }
+                ]
+            }
+        }
+    ]
+}

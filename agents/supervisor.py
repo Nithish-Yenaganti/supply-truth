@@ -1,6 +1,7 @@
+import operator
 import sys
 from pathlib import Path
-from typing import TypedDict
+from typing import TypedDict, Annotated
 from langgraph.graph import StateGraph, END
 from datetime import datetime
 
@@ -19,7 +20,7 @@ class AgentState(TypedDict):
     raw_text: str
     extracted_data: dict
     critique: dict
-    iterations: int  # We limit loops so it doesn't run forever
+    iterations: Annotated[int, operator.add]
 
 # 2. Initialize our Agents
 parser = ParserAgent()
@@ -92,7 +93,7 @@ def router(state: AgentState):
     # This is the "Decision" function
     if state["critique"]["is_valid"]:
         return "accept"
-    elif state["iterations"] > 2:
+    elif state["iterations"] > 3:
         return "fail"
     else:
         return "retry"

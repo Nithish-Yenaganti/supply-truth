@@ -20,7 +20,7 @@ class ParserAgent:
         # We use Gemini 1.5 Pro for its reasoning depth
         # temperature=0 ensures we get facts, not 'creative' hallucinations
         self.llm = ChatOpenAI(
-            model="google/gemini-3.1-flash-lite-preview",
+            model="google/gemini-3.1-pro-preview",
             temperature=0,
             api_key=os.getenv("GMI_CLOUD_API_KEY"),
             base_url=os.getenv("BASE_URL"),

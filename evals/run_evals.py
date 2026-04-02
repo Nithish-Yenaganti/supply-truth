@@ -1,10 +1,16 @@
 import os
-
+import sys
+from pathlib import Path
 from langsmith import Client
 from langchain_core.globals import set_llm_cache
 from langchain_community.cache import SQLiteCache
-from ..agents.supervisor import app
 
+
+PROJECT_ROOT = Path(__file__).resolve().parents[1]
+if str(PROJECT_ROOT) not in sys.path:
+    sys.path.insert(0, str(PROJECT_ROOT))
+
+from agents.supervisor import app
 
 # 1. Setup Cache (Optional/Hybrid)
 if os.getenv("CLEAN_EVAL") != "true":
@@ -55,7 +61,7 @@ def main():
         data="supply_truth_50",
         evaluators=[eval_json_exact, eval_field_recall],
         experiment_prefix="v1-logic-test",
-        max_concurrency=5
+        max_concurrency=5,
     )
     print(" Evaluation Complete. View results in LangSmith.")
 
