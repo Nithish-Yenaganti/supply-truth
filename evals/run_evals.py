@@ -20,7 +20,7 @@ client = Client()
 
 # --- CUSTOM EVALUATORS ---
 
-def eval_json_exact(run, example) -> dict:
+def eval_json_exact(run, example, **kwargs) -> dict:
     """Checks if the total JSON is an exact match to the reference."""
     predicted = run.outputs.get("extracted_data", {})
     expected = example.outputs.get("expected", {})
@@ -29,7 +29,7 @@ def eval_json_exact(run, example) -> dict:
     score = 1.0 if predicted == expected else 0.0
     return {"key": "json_exact", "score": score}
 
-def eval_field_recall(run, example) -> dict:
+def eval_field_recall(run, example, **kwargs) -> dict:
     """Calculates what % of expected fields were correctly extracted."""
     predicted = run.outputs.get("extracted_data", {})
     expected = example.outputs.get("expected", {})
@@ -49,7 +49,7 @@ def predict(inputs: dict) -> dict:
     """Passes the dataset input into your LangGraph app."""
     # Ensure we use the right key from your dataset (usually 'input')
     raw_text = inputs.get("input") or ""
-    result = app.invoke({"raw_text": raw_text}, config={"recursion_limit": 10})
+    result = app.invoke({"raw_text": raw_text, "iterations": 0}, config={"recursion_limit": 10})
     return {"extracted_data": result.get("extracted_data", {})}
 
 # --- MAIN EXECUTION ---

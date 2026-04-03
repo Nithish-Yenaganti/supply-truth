@@ -4,6 +4,7 @@ from pathlib import Path
 from typing import TypedDict, Annotated
 from langgraph.graph import StateGraph, END
 from datetime import datetime
+from pydantic import ValidationError
 
 # Ensure project root is importable when running this file directly.
 PROJECT_ROOT = Path(__file__).resolve().parents[1]
@@ -79,7 +80,18 @@ def critic_node(state: AgentState):
                 prior_history = prior_record.get("history", []) or []
 
     from agents.schema.supply_chain import Shipment
-    shipment_obj = Shipment(**new_data)
+
+    
+    try:
+        shipment_obj = Shipment(**new_data)
+    except ValidationError as e:
+        return {"critique": {"is_valid": False,
+            "issues": [f"Shipment schema validation failed: {e}"],
+            "reconciliation_status": "PARSER_ERROR",
+            "final_decision": "Parser returned incomplete or invalid structured data.",
+        }
+    }
+
     verdict = critic.verify(
         shipment_obj,
         db,
