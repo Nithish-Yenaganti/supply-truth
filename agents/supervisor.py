@@ -5,7 +5,7 @@ from typing import TypedDict, Annotated
 from langgraph.graph import StateGraph, END
 from datetime import datetime
 from pydantic import ValidationError
-
+import re
 # Ensure project root is importable when running this file directly.
 PROJECT_ROOT = Path(__file__).resolve().parents[1]
 if str(PROJECT_ROOT) not in sys.path:
@@ -119,7 +119,8 @@ def save_to_gold_node(state: AgentState):
     new_data = state["extracted_data"]
     shipment_id = new_data.get("shipment_id", "UNKNOWN")
     os.makedirs("data/gold", exist_ok=True)
-    file_path = f"data/gold/{shipment_id}.json"
+    safe_shipment_id = re.sub(r'[^a-zA-Z0-9]', '_', shipment_id)
+    file_path = f"data/gold/{safe_shipment_id}.json"
 
     # 1. Initialize or Load the Record
     if os.path.exists(file_path):
